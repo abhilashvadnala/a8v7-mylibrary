@@ -1,34 +1,38 @@
 import React from "react";
-import { Row } from "react-bootstrap";
+import { Row, Table } from "react-bootstrap";
 
 function BookList(props) {
   const deleteItem = id => {
     props.delBook(id)
   };
-
-  const bookTRs = props.bookList.map(book => {
+  const bookEmojis = ["📒", "📓", "📔", "📕", "📗", "📘", "📙"]
+  const bookTRs = props.bookList.map((book,ind) => {
     return (
-      <tr>
-        <td>{book.id}</td>
+      <tr key={book.id}>
+        <td> <span>{bookEmojis[Math.floor(bookEmojis.length*Math.random())]}</span> {ind+1}</td>
         <td>{book.title}</td>
         <td>{book.author}</td>
-        <td onClick={() => deleteItem(book.id)} style={{ color: "red" }}>
-          X
+        <td onClick={() => deleteItem(book.id)}>
+          &#10060;
         </td>
       </tr>
     );
   });
 
   return (
-    <table style={{ width: "60%" }}>
-      <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Delete</th>
-      </tr>
-      {bookTRs}
-    </table>
+    <Table striped hover>
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {bookTRs}
+      </tbody>
+    </Table>
   );
 }
 

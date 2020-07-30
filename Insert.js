@@ -58,8 +58,7 @@ function Insert(props) {
       <input
         className="form-field"
         type="submit"
-        value="Add"
-        style={{ backgroundColor: "lightgreen" }}
+        value="&#9989;"
       />
     </form>
   );
