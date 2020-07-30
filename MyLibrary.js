@@ -4,9 +4,34 @@ import FileUpload from "./FileUpload";
 import BookList from "./BookList";
 import { Row, Col } from "react-bootstrap";
 
+function useLocalStorage(key, initValue) {
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initValue;
+    } catch (err) {
+      console.log(err);
+      return initValue;
+    }
+  });
+
+  const setValue = value => {
+    try {
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+      setStoredValue(value);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return [storedValue, setValue];
+}
+
 function MyLibrary(props) {
-  const [id, setId] = useState(1);
-  const [books, setBooks] = useState([]);
+  const [id, setId] = useState("id", 1);
+  const [books, setBooks] = useLocalStorage("books", []);
 
   const addBook = book => {
     book.id = id;
@@ -47,7 +72,7 @@ function MyLibrary(props) {
           sm={{ span: 10, offset: 1 }}
         >
           <BookList bookList={books} delBook={delBook} />
-          {(books.length == 0) ? <h4>Such Empty Library 🥴</h4> : <></>}
+          {books.length == 0 ? <h4>Such Empty Library 🥴</h4> : <></>}
         </Row>
       </Col>
     </Row>
